@@ -1,0 +1,44 @@
+class Solution {
+public:
+    
+    int getf(int n){
+        int a=1;
+        while(n>0){
+            a *=n--;
+        }
+        return a;
+    }
+    string getPermutation(int n, int k) {
+        vector<char> arr;
+        string ans;
+        for(int i=0;i<n;i++){
+            arr.push_back(49+i);
+        }
+        int t;
+        for(int i=0; i<n-2;i++){
+            if(k==0){
+                break;
+            }
+            t = (k) / getf(n-i-1);
+            if(k % getf(n-i-1) == 0 && t != 0){
+                ans = ans + arr[t-1];
+                arr.erase(arr.begin()+(t-1));
+            }else{
+                ans = ans + arr[t];
+                arr.erase(arr.begin()+t);
+            }
+            k=k % getf(n-i-1);
+        }
+        if(k==1){
+            for(int i = 0; i<arr.size();i++){
+                ans = ans + arr[i];
+            }
+        }else{
+            for(int i =arr.size() - 1; i>=0;i--){
+                ans = ans + arr[i];
+            }
+        }
+
+        return ans;
+    }
+};
