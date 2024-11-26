@@ -1,0 +1,125 @@
+class Solution {
+public:
+    unordered_map <int,int> arr;
+
+    int arr_to_int(vector<vector<int>> a){
+        int temp = 0;
+        for(int i=0;i<2;i++){
+            for(int j=0;j<3;j++){
+                temp = (temp * 10) + a[i][j];
+            }
+        }
+        //cout<<"temp :"<<temp<<endl;
+        return temp;
+    }
+
+    int arr_to_int(int a[]){
+        int temp = 0;
+        for(int i=0;i<6;i++){
+            temp = (temp * 10) + a[i];
+        }
+        return temp;
+    }
+
+    vector<int> check(int num){
+        vector<int> ans;
+        int i = 0;
+        int a[6];
+        int div = 100000;
+        if(num / 100000 < 1 ){
+            a[0]=0;
+            i++;
+            div = div / 10;
+        }
+
+        //cout<<endl<<num<<"<= op =>";
+        for(;i<6;i++){
+            a[i] = num / div;
+            num = num % div;
+            div = div / 10;
+            //cout<<a[i];
+        }
+        //cout<<endl;
+
+        if(a[0] == 0){
+            swap(a[0],a[1]);
+            ans.push_back(arr_to_int(a));
+            swap(a[0],a[1]);
+            swap(a[0],a[3]);
+            ans.push_back(arr_to_int(a));
+            swap(a[0],a[3]);
+        }else if(a[1] == 0){
+            swap(a[0],a[1]);
+            ans.push_back(arr_to_int(a));
+            swap(a[0],a[1]);
+            swap(a[1],a[2]);
+            ans.push_back(arr_to_int(a));
+            swap(a[1],a[2]);
+            swap(a[1],a[4]);
+            ans.push_back(arr_to_int(a));
+            swap(a[1],a[4]);
+        }else if(a[2] == 0){
+            swap(a[2],a[1]);
+            ans.push_back(arr_to_int(a));
+            swap(a[2],a[1]);
+            swap(a[2],a[5]);
+            ans.push_back(arr_to_int(a));
+            swap(a[2],a[5]);
+        }else if(a[3] == 0){
+            swap(a[3],a[4]);
+            ans.push_back(arr_to_int(a));
+            swap(a[3],a[4]);
+            swap(a[0],a[3]);
+            ans.push_back(arr_to_int(a));
+            swap(a[0],a[3]);
+        }else if(a[4] == 0){
+            swap(a[4],a[1]);
+            ans.push_back(arr_to_int(a));
+            swap(a[4],a[1]);
+            swap(a[4],a[3]);
+            ans.push_back(arr_to_int(a));
+            swap(a[4],a[3]);
+            swap(a[4],a[5]);
+            ans.push_back(arr_to_int(a));
+            swap(a[4],a[5]);
+        }else if(a[5] == 0){
+            swap(a[5],a[2]);
+            ans.push_back(arr_to_int(a));
+            swap(a[5],a[2]);
+            swap(a[5],a[4]);
+            ans.push_back(arr_to_int(a));
+            swap(a[5],a[4]);
+        }
+        return ans;
+
+    }
+
+    int slidingPuzzle(vector<vector<int>>& board) {
+        queue<int> ue;
+
+        ue.push(arr_to_int(board));
+        arr[arr_to_int(board)] = 0;
+
+        while(!ue.empty()){
+            int temp = ue.front();
+            if(temp == 123450){
+                break;
+            }
+            vector<int> al = check(temp);
+            for(int i = 0; i< al.size(); i++){
+                //cout<<al[i]<<"  ->  ";
+                if(arr.find(al[i]) == arr.end() || (arr[temp] + 1) < arr[al[i]] ){
+                    arr[al[i]] = arr[temp] + 1;
+                    ue.push(al[i]);
+                }
+            }
+            //cout<<endl;
+            ue.pop();
+        }
+        if(arr.find(123450) == arr.end()){
+            return -1;
+        }
+        return arr[123450];
+
+    }
+};
